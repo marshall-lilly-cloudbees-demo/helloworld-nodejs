@@ -1,9 +1,5 @@
 pipeline {
-  agent {
-    kubernetes {
-      label 'nodejs-app-pod-2'
-      yamlFile 'nodejs-pod.yaml'
-    }
+  agent none
   }
   options {
     buildDiscarder(logRotator(numToKeepStr: '2'))
@@ -11,7 +7,12 @@ pipeline {
   }
   stages {
     stage('Test') {
-      agent { label 'nodejs-app' }
+      agent {
+        kubernetes {
+          label 'nodejs-app-pod-2'
+          yamlFile 'nodejs-pod.yaml'
+        }
+      }
       steps {
         checkout scm
         container('nodejs') {
